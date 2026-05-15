@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - AI Law Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Full-page setup */
+    html, body {
+      margin: 0; padding: 0; height: 100%; width: 100%;
+      font-family: Arial, sans-serif; overflow: hidden;
+      display: flex; justify-content: center; align-items: center;
+    }
+
+    /* Video background */
+    .video-background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    /* Dark overlay for readability */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: -1;
+    }
+
+    /* Login form styling */
+    form {
+      background: white; /* more visible */
+      padding: 30px 40px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      min-width: 300px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    input, button {
+      margin: 10px 0;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #10a37f;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #0d8d6b;
+    }
+
+    a {
+      color: #10a37f;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    h2 { text-align: center; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- Video background -->
+  <video class="video-background" autoplay muted loop playsinline>
+    <source src="../static/video2.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Login Form -->
+  <form method="POST" action="/login">
+    <h2>🔑 Login</h2>
+    <input type="text" name="username" placeholder="Enter username" required>
+    <input type="password" name="password" placeholder="Enter password" required>
+    <button type="submit">Login</button>
+    <p>Don’t have an account? <a href="/signup">Signup</a></p>
+  </form>
+
+</body>
+</html>

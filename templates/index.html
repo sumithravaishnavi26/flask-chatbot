@@ -1,202 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Gemini Chatbot 💬</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    /* Background image and overlay */
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      height: 100vh;
-      overflow: hidden;
-      background: url("static/photo.jpg");
-      background-size: cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5); /* Overlay darkness */
-      z-index: 0;
-    }
-
-    /* Chat container styling */
-   .chat-container {
-  width: 100%;
-  max-width: 600px;
-  height: 90vh;
-  background: rgba(255, 255, 255, 0.05); /* semi-transparent */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(16px); /* frosted glass */
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding: 0;
-  transition: all 0.3s ease-in-out;
+<meta charset="UTF-8">
+<title>AI Local Law Chatbot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    color:#ECECEC;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    overflow:hidden;
+}
+body::before {
+    content:"";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:url("/static/photo.jpg") no-repeat center center;
+    background-size:cover;
+    z-index:-2;
+}
+body::after {
+    content:"";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index:-1;
 }
 
-
-
-.chat-header {
-  background-color: #2E0E2D;
-  color: white;
-  padding: 16px;
-  font-size: 1.25rem;
-  font-weight: bold;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    padding:12px 20px;
+    background: rgba(0,0,0,0.8);
+    border-bottom:1px solid rgba(255,255,255,0.15);
+    z-index:2;
+}
+.navbar h1 {
+    font-size:1.4rem;
+    font-weight:bold;
+}
+.navbar .nav-links button {
+    background:none;
+    border:none;
+    color:#ECECEC;
+    margin-left:18px;
+    cursor:pointer;
+    font-size:1rem;
+    transition:color 0.3s;
+}
+.navbar .nav-links button:hover {
+    color:#10a37f;
 }
 
-.chat-input-area {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.08);
+.main {
+    display:flex;
+    flex:1;
+    overflow:hidden;
 }
-
-
-
-    .chat-box {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .message {
-      max-width: 80%;
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      border-radius: 20px;
-      line-height: 1.4;
-      font-size: 0.95rem;
-      word-wrap: break-word;
-    }
-
-    .user {
-      align-self: flex-end;
-      background-color: #2E0E2D;
-      color: white;
-      border-bottom-right-radius: 4px;
-    }
-
-    .bot {
-      align-self: flex-start;
-      background-color:#2E0E2D;
-      color: #333;
-      border-bottom-left-radius: 4px;
-    }
-
-    .chat-input-area {
-      display: flex;
-      padding: 10px;
-      border-top: 1px solid #ccc;
-      background-color: #2E0E2D;
-    }
-
-    .chat-input-area input {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      outline: none;
-      font-size: 1rem;
-    }
-
-    .chat-input-area button {
-      margin-left: 10px;
-      padding: 12px 20px;
-      border: none;
-      background-color: #2E0E2D;
-      color: white;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .chat-input-area button:hover {
-      background-color: #2E0E2D;
-    }
-    body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: url("/static/photo.jpg") no-repeat center center fixed;
-  background-size: cover;
+.history {
+    width:260px;
+    background:rgba(0,0,0,0.85);
+    border-right:1px solid rgba(255,255,255,0.1);
+    padding:15px;
+    display:none;
+    flex-direction:column;
+    overflow-y:auto;
+    z-index:2;
+}
+.chat-area {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+.chat-container {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    overflow-y:auto;
+    padding:20px;
+    gap:12px;
+}
+.message-container {
+    display:flex;
+    flex-direction:column;
+}
+.message {
+    max-width:70%;
+    padding:12px 16px;
+    border-radius:12px;
+    font-size:1rem;
+    word-wrap:break-word;
+    white-space: pre-wrap;
 }
 .bot {
-  align-self: flex-start;
-  background-color: #2E0E2D;
-  color: #ffffff; /* Changed from #333 to white */
-  border-bottom-left-radius: 4px;
+    align-self:flex-start;
+    background:rgba(255,255,255,0.08);
+    color:#ECECEC;
+}
+.user {
+    align-self:flex-end;
+    background:#10a37f;
+    color:#fff;
 }
 
-  </style>
+.input-bar {
+    display:flex;
+    padding:12px;
+    background: rgba(0,0,0,0.85);
+    border-top:1px solid rgba(255,255,255,0.15);
+}
+.input-bar textarea {
+    flex:1;
+    resize:none;
+    border:none;
+    border-radius:8px;
+    padding:12px;
+    font-size:16px;
+    background:rgba(255,255,255,0.08);
+    color:#ECECEC;
+    outline:none;
+    overflow:hidden;
+}
+.send-btn {
+    margin-left:10px;
+    background:#10a37f;
+    border:none;
+    color:white;
+    padding:12px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+    transition: background 0.3s;
+}
+.send-btn:hover { background:#0d8d6b; }
+#micBtn {
+    margin-left:5px;
+    background:#f39c12;
+    border:none;
+    color:white;
+    padding:12px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+    transition: background 0.3s;
+}
+#micBtn.listening { background:#0d8d6b; }
+.speak-btn {
+    margin-top:6px;
+    background:#3498db;
+    border:none;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+}
+.speak-btn:hover { background:#2980b9; }
+
+.history-item {
+    margin-bottom:12px;
+    padding:8px;
+    border-radius:8px;
+    background: rgba(255,255,255,0.05);
+    white-space: pre-wrap;
+}
+</style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header"> AI LOCAL LAW CHATBOT</div>
-    <div class="chat-box" id="chatBox"></div>
-    <div class="chat-input-area">
-      <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKey(event)">
-      <button onclick="sendMessage()">Send</button>
+<div class="navbar">
+  <h1>⚖ AI LOCAL LAW CHATBOT</h1>
+  <div class="nav-links">
+    <a href="/logout"><button>Logout</button></a>
+    <button onclick="loadHistory()">History</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="history" id="historyPanel"><h2>Past Chats</h2></div>
+  <div class="chat-area">
+    <div class="chat-container" id="chatBox">
+      <div class="message-container">
+        <div class="message bot">Hey! How can I help you today?</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <textarea id="userInput" rows="1" placeholder="Type your message..."></textarea>
+      <button class="send-btn" onclick="sendMessage()">➤</button>
+      <button id="micBtn" title="Speak">🎤</button>
     </div>
   </div>
+</div>
 
-  <script>
-    function appendMessage(sender, text) {
-      const chatBox = document.getElementById('chatBox');
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'message ' + sender;
-      msgDiv.textContent = text;
-      chatBox.appendChild(msgDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+<script>
+const chatBox = document.getElementById('chatBox');
+const userInput = document.getElementById('userInput');
+const historyPanel = document.getElementById('historyPanel');
+const micBtn = document.getElementById('micBtn');
 
-    async function sendMessage() {
-      const input = document.getElementById('userInput');
-      const message = input.value.trim();
-      if (!message) return;
+function appendMessage(sender, text){
+  const container = document.createElement('div');
+  container.className = 'message-container';
+  
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'message ' + sender;
 
-      appendMessage('user', message);
-      input.value = '';
-      input.disabled = true;
+  if(sender==='bot'){
+    msgDiv.innerHTML = text;
+    const speakBtn = document.createElement('button');
+    speakBtn.className='speak-btn';
+    speakBtn.textContent='🔊 Speak';
+    speakBtn.onclick = ()=> speakText(msgDiv.innerText);
+    container.appendChild(msgDiv);
+    container.appendChild(speakBtn);
+  } else {
+    msgDiv.textContent = text;
+    container.appendChild(msgDiv);
+  }
 
-      try {
-        const res = await fetch('/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
-        const data = await res.json();
-        appendMessage('bot', data.reply);
-      } catch (err) {
-        appendMessage('bot', '⚠️ Unable to connect to chatbot');
-      }
+  chatBox.appendChild(container);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-      input.disabled = false;
-      input.focus();
-    }
+function speakText(text){
+  if('speechSynthesis' in window){
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-IN';
+    window.speechSynthesis.speak(utterance);
+  }
+}
 
-    function handleKey(event) {
-      if (event.key === 'Enter') {
-        sendMessage();
-      }
-    }
-  </script>
+async function sendMessage(){
+  let message = userInput.value.trim();
+  if(!message) return;
+  appendMessage('user', message);
+  userInput.value='';
+
+  try{
+    const res = await fetch('/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      credentials:'include',
+      body: JSON.stringify({message})
+    });
+
+    const data = await res.json();
+    appendMessage('bot', data.reply || data.error);
+  }catch(err){
+    console.error(err);
+    appendMessage('bot','⚠ Unable to connect to chatbot');
+  }
+}
+
+async function loadHistory(){
+  try{
+    const res = await fetch('/history', {credentials:'include'});
+    const data = await res.json();
+    historyPanel.innerHTML="<h2>Past Chats</h2>";
+    data.forEach(item=>{
+      const div=document.createElement("div");
+      div.className="history-item";
+      div.innerHTML = `<strong>You:</strong> ${item.user}<br><strong>Bot:</strong> ${item.bot}`;
+      historyPanel.appendChild(div);
+    });
+    historyPanel.style.display="flex";
+  }catch(err){ alert("⚠ Unable to load history"); }
+}
+
+userInput.addEventListener("input",()=>{ 
+  userInput.style.height="auto"; 
+  userInput.style.height=userInput.scrollHeight+"px"; 
+});
+userInput.addEventListener("keypress",function(event){ 
+  if(event.key==="Enter"&&!event.shiftKey){ 
+    event.preventDefault(); 
+    sendMessage(); 
+  } 
+});
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(!SpeechRecognition){
+  micBtn.disabled = true;
+  micBtn.title = "Speech recognition not supported";
+} else {
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-IN';
+
+  micBtn.addEventListener('click', () => {
+    recognition.start();
+    micBtn.classList.add('listening');
+  });
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    userInput.value = transcript;
+    sendMessage();
+  };
+
+  recognition.onend = () => micBtn.classList.remove('listening');
+  recognition.onerror = (event) => { console.error(event.error); micBtn.classList.remove('listening'); };
+}
+</script>
 </body>
 </html>
